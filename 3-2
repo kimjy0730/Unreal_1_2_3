@@ -1,0 +1,147 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+template <typename T>
+class SimpleVector {
+private:
+	T* data;
+	int Count = 0;
+	int num1;
+
+public:
+
+	SimpleVector()
+	{
+		num1 = 10;
+		data = new T[num1];
+	};
+
+	SimpleVector(int capacit)
+	{
+		num1 = capacit;
+		data = new T[num1];
+	};
+
+	SimpleVector(const SimpleVector& other) {
+		num1 = other.num1;
+		Count = other.Count;
+		data = new T[num1];
+		for (int i = 0; i < Count; i++)
+		{
+			data[i] = other.data[i]; // strcpy << 참고 해서 해결해보기..
+		}
+	};
+
+	void resize(int newCapacity)
+	{
+		if (newCapacity > num1)
+		{
+			T* newdata = new T[newCapacity];
+			for (int i = 0; i < Count; i++)
+			{
+				newdata[i] = data[i];
+			}
+
+			data = newdata;
+			num1 = newCapacity;
+
+		}
+	}
+
+
+	void push_back(const T& b)
+	{
+		if (Count < num1)
+		{
+			data[Count] = b;
+			Count++;
+		}
+		else if (Count >= num1)
+		{
+			T* newpush = new T[num1 + 5];
+			for (int i = 0; i < Count; i++)
+			{
+				newpush[i] = data[i];
+			}
+			data = newpush;
+			num1 = num1 + 5;
+
+
+			data[Count] = b;
+			Count++;
+			cout << "크기가 추가되었습니다." << endl;
+		}
+	}
+
+	void pop_back()
+	{
+		if (Count > 0)
+		{
+			Count--;
+		}
+
+	}
+
+	int size() const { return Count; }
+
+	int capacity() const { return num1; }
+
+	~SimpleVector()
+	{
+		delete[] data;
+	}
+
+	void sortData()
+	{
+		sort(data, data + Count);
+		cout << "오름차순 정렬 : ";
+		for (int i = 0; i < Count; i++)
+		{
+			cout << data[i] << " ";
+		}
+
+	}
+};
+
+
+int main()
+{
+	int capacit;
+	cout << "초기 용량값을 설정해주세요." << endl;
+	cin >> capacit;
+
+	SimpleVector<int>data(capacit);
+	cout << "----데이터 입력----" << endl;
+	data.push_back(80);
+	data.push_back(60);
+	data.push_back(70);
+	data.push_back(40);
+	data.push_back(50);
+	data.push_back(20);
+	cout << "size : " << data.size() << endl;
+	cout << "capacity : " << data.capacity() << endl;
+	data.push_back(30);
+	cout << "size : " << data.size() << endl;
+	cout << "capacity : " << data.capacity() << endl;
+	data.push_back(10);
+	cout << "size : " << data.size() << endl;
+	cout << "capacity : " << data.capacity() << endl;
+
+	SimpleVector<int>date(data);
+	cout << "----복사 생성자 실행----" << endl;
+	cout << "size 복사  : " << date.size() << endl;
+	cout << "capacity 복사 : " << date.capacity() << endl;
+
+	data.pop_back();
+	cout << "----pop_back 실행----" << endl;
+	cout << "2. size : " << data.size() << endl;
+	cout << "2. capacity : " << data.capacity() << endl;
+	
+	data.sortData();
+
+
+	return 0;
+}
